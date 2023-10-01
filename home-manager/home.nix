@@ -3,8 +3,8 @@
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "dfontaine";
-  home.homeDirectory = "/home/dfontaine";
+  home.username = "dylf";
+  home.homeDirectory = "/home/dylf";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -13,31 +13,13 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.05"; # Please read the comment before changing.
+  home.stateVersion = "22.11"; # Please read the comment before changing.
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    pkgs.bat
-    pkgs.brave
-    pkgs.fzf
-    pkgs.htop
-    pkgs.nodejs_18
-    pkgs.peek
-    pkgs.ranger
-    pkgs.ripgrep
-    pkgs.tmux
-    pkgs.virt-manager
-    pkgs.vlc
-    pkgs.zsh
-
-    (pkgs.nerdfonts.override { fonts = [
-      "ComicShannsMono"
-      "JetBrainsMono"
-      "VictorMono"
-      ]; })
+    # fonts?
+    (pkgs.nerdfonts.override { fonts = [ "SpaceMono" ]; })
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -62,10 +44,6 @@
     # '';
   };
 
-  programs.zsh = {
-   enable = true; 
-  };
-
   # You can also manage environment variables but you will have to manually
   # source
   #
@@ -73,7 +51,7 @@
   #
   # or
   #
-  #  /etc/profiles/per-user/dfontaine/etc/profile.d/hm-session-vars.sh
+  #  /etc/profiles/per-user/dylf/etc/profile.d/hm-session-vars.sh
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
@@ -82,4 +60,42 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.git = {
+    enable = true;
+    userName = "dylf";
+    userEmail = "10430358+dylf@users.noreply.github.com";
+    aliases = {
+      cane = "commit --amend --no-edit";
+    };
+  };
+
+  wayland.windowManager.hyprland.extraConfig = ''
+    exec-once = waybar
+
+    $mod = SUPER
+
+    bind = $mod, B, exec, firefox
+    bind = $mod, T, exec, wezterm
+    bind = $mod, Q, killactive
+    bind = $mod, M, exit,
+    bind = $mod, G, togglefloating,
+
+    # Move focus
+    bind = $mod, left, movefocus, l
+    bind = $mod, down, movefocus, d
+    bind = $mod, up, movefocus, u
+    bind = $mod, right, movefocus, r
+    bind = $mod, h, movefocus, l
+    bind = $mod, j, movefocus, d
+    bind = $mod, k, movefocus, u
+    bind = $mod, l, movefocus, r
+
+    bind = $mod, S, exec, rofi -show drun -show-icons
+
+    input {
+      kb_options=caps:swapescape
+    }
+  '';
+
 }
