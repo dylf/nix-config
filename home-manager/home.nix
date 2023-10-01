@@ -95,6 +95,7 @@
 
     input {
       kb_options=caps:swapescape
+      natural_scroll = true
     }
   '';
 
