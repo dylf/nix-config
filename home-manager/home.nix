@@ -31,6 +31,8 @@
 
   home.sessionVariables = {
     EDITOR = "nvim";
+    BROWSER = "firefox";
+    TERMINAL = "wezterm";
   };
 
   # Let Home Manager install and manage itself.
@@ -76,10 +78,35 @@
     bind = $mod, down, movefocus, d
     bind = $mod, up, movefocus, u
     bind = $mod, right, movefocus, r
+
+    # Move focus vim bindings
     bind = $mod, h, movefocus, l
     bind = $mod, j, movefocus, d
     bind = $mod, k, movefocus, u
     bind = $mod, l, movefocus, r
+
+    # Switch workspaces
+    bind = $mod, 1, workspace, 1
+    bind = $mod, 2, workspace, 2
+    bind = $mod, 3, workspace, 3
+    bind = $mod, 4, workspace, 4
+
+    # workspaces
+    # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
+    ${builtins.concatStringsSep "\n" (builtins.genList (
+        x: let
+          ws = let
+            c = (x + 1) / 10;
+          in
+            builtins.toString (x + 1 - (c * 10));
+        in ''
+          bind = $mod, ${ws}, workspace, ${toString (x + 1)}
+          bind = $mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}
+        ''
+      )
+      10)}
+
+    # ...
 
     bindr = SUPER, SUPER_L, exec, rofi -show drun -show-icons
 
