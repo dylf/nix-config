@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
+      ./hardware-configuration.nix
     ];
 
   # Bootloader.
@@ -47,23 +47,29 @@
   # Enable automatic login for the user.
   services.getty.autologinUser = "dylf";
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    lld
+    gcc
+    glibc
+
+    rustup
     home-manager
     neovim
     vim
     wget
     lf
-    pkgs.waybar
-    pkgs.mako
+
+    # DE
+    waybar
+    # Notifications
     libnotify
-    wezterm
+    mako
     swww
     rofi-wayland
+
+    wezterm
     firefox
   ];
 
@@ -101,7 +107,7 @@
 
   programs.hyprland = {
     enable = true;
-    nvidiaPatches = true;
+    enableNvidiaPatches = true;
     xwayland.enable = true;
   };
 

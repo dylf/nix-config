@@ -10,9 +10,14 @@
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
+
+    nvimConfig = {
+      url = "github:dylf/nvim-config";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, home-manager, hyprland, ... }:
+  outputs = { nixpkgs, home-manager, hyprland, nvimConfig, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -27,6 +32,8 @@
 	  hyprland.homeManagerModules.default
 	  {wayland.windowManager.hyprland.enable = true;}
 	];
+
+	extraSpecialArgs = { inherit nvimConfig; };
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix

@@ -1,8 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nvimConfig, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home.username = "dylf";
   home.homeDirectory = "/home/dylf";
 
@@ -17,43 +15,20 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    # fonts?
-    (pkgs.nerdfonts.override { fonts = [ "SpaceMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+  home.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "SpaceMono" ]; })
+    clang
+    go
+    lazygit
+    nodejs
+    ripgrep
+    unzip
   ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+  home.file = { 
+    "${config.xdg.configHome}/nvim".source = "${nvimConfig}/";
   };
 
-  # You can also manage environment variables but you will have to manually
-  # source
-  #
-  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  /etc/profiles/per-user/dylf/etc/profile.d/hm-session-vars.sh
-  #
-  # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
     EDITOR = "nvim";
   };
@@ -70,15 +45,30 @@
     };
   };
 
+  programs.fish = {
+    enable = true;
+    plugins = [
+      { name = "z"; src = pkgs.fishPlugins.z.src; }
+    ];
+  };
+
+  # TODO: Treesitter compilation issues
+  programs.neovim.plugins = with pkgs; [
+    vimPlugins.nvim-treesitter
+    vimPlugins.nvim-treesitter.withAllGrammars
+  ];
+
   wayland.windowManager.hyprland.extraConfig = ''
     exec-once = waybar
+
+    monitor=eDP-1, 1920x1080, 0x0, 1
 
     $mod = SUPER
 
     bind = $mod, B, exec, firefox
     bind = $mod, T, exec, wezterm
     bind = $mod, Q, killactive
-    bind = $mod, M, exit,
+    bind = $mod, ;, exit,
     bind = $mod, G, togglefloating,
 
     # Move focus
@@ -91,7 +81,7 @@
     bind = $mod, k, movefocus, u
     bind = $mod, l, movefocus, r
 
-    bind = $mod, S, exec, rofi -show drun -show-icons
+    bindr = SUPER, SUPER_L, exec, rofi -show drun -show-icons
 
     input {
       kb_options=caps:swapescape

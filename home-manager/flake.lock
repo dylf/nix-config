@@ -99,11 +99,28 @@
         "type": "github"
       }
     },
+    "nvimConfig": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1695425066,
+        "narHash": "sha256-lI1apT3JKi1T/x6RqaOI6HTKlvHXcbKVj5/WcgA36Uk=",
+        "owner": "dylf",
+        "repo": "nvim-config",
+        "rev": "40fbda16139b0be5eda1e5949505597c571fa37a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dylf",
+        "repo": "nvim-config",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "hyprland": "hyprland",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nvimConfig": "nvimConfig"
       }
     },
     "systems": {
